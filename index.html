@@ -155,8 +155,20 @@
   .qtotal .v{font-size:clamp(32px,4.2vw,46px);font-weight:800;color:var(--gold-deep);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
   .qtotal .v small{font-size:16px;font-weight:700;margin-right:4px;color:var(--gold-deep);}
   .qtotal .v .hl{background:linear-gradient(transparent 62%,var(--yellow) 62%);padding:0 3px;}
-  .qsub{font-size:14px;color:var(--gray);margin-top:20px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;}
+  .qsub{font-size:14px;color:var(--gray);margin-top:18px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;}
   .qsub b{color:var(--ink);font-weight:700;}
+  /* compact quote with grouped custom items */
+  .qlist.compact{margin-top:24px;}
+  .qlist.compact .qrow{padding:9px 2px;}
+  .qlist.compact .qrow .l{font-size:15px;}
+  .qgroup{margin:16px 0 0;padding-bottom:4px;font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--gold-deep);display:flex;align-items:center;gap:8px;}
+  .qgroup::before{content:"";width:16px;height:2px;background:var(--yellow);border-radius:2px;}
+  .qrow .l .ct{display:inline-block;font-size:10px;font-weight:800;color:var(--gold-deep);background:var(--yellow-tint);border-radius:5px;padding:1px 6px;margin-right:7px;vertical-align:1.5px;letter-spacing:.04em;}
+  .qrow.subtot{border-bottom:0;padding-top:14px;}
+  .qrow.subtot .l,.qrow.subtot .v{color:var(--gray);font-weight:600;}
+  .qrow.disc{border-bottom:0;padding:5px 2px;}
+  .qrow.disc .l,.qrow.disc .v{color:var(--gold);font-weight:700;}
+  .qtotal.tight{margin-top:12px;padding-top:16px;}
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
@@ -338,16 +350,22 @@
   <div class="inner">
     <div class="eyebrow gold reveal">專案報價</div>
     <h2 class="reveal" style="transition-delay:.05s">一次建置，長期使用。</h2>
-    <div class="qlist reveal" style="transition-delay:.12s">
+    <div class="qlist compact reveal" style="transition-delay:.12s">
       <div class="qrow"><span class="l">平台建置與多租戶白標基礎<small>系統架構 · 帳號認證 · 租戶／品牌設定 · 權限模型</small></span><span class="v">120,000</span></div>
       <div class="qrow"><span class="l">HR 差勤核心<small>組織人事 80k · 差勤 110k · 請假簽核 70k · 薪資 90k</small></span><span class="v">350,000</span></div>
       <div class="qrow"><span class="l">招募 ATS 與 KPI 績效</span><span class="v">60,000</span></div>
-      <div class="qrow"><span class="l">客製三模組<small>專案獎金分潤 110k · 內部知識庫 50k · 帳號權限配發 30k</small></span><span class="v">190,000</span></div>
       <div class="qrow"><span class="l">雲端部署上線與資安設定</span><span class="v">40,000</span></div>
       <div class="qrow"><span class="l">教育訓練與上線輔導</span><span class="v">40,000</span></div>
-      <div class="qtotal"><span class="l">專案總價（未稅）</span><span class="v"><small>NT$</small><span class="hl">800,000</span></span></div>
+      <div class="qgroup">客製化項目 · 依貴公司需求指定</div>
+      <div class="qrow"><span class="l"><i class="ct">客製</i>專案獎金分潤<small>雙模式 · 權限分級 · 分潤留痕</small></span><span class="v">110,000</span></div>
+      <div class="qrow"><span class="l"><i class="ct">客製</i>內部知識庫<small>專案文件庫 · 私有雲端儲存</small></span><span class="v">50,000</span></div>
+      <div class="qrow"><span class="l"><i class="ct">客製</i>員工帳號權限配發<small>帳號建立 · 密碼配發 · 角色權限</small></span><span class="v">30,000</span></div>
+      <div class="qrow"><span class="l"><i class="ct">客製</i>客製化官網<small>形象官網 · RWD 響應式 · 前台設計</small></span><span class="v">100,000</span></div>
+      <div class="qrow subtot"><span class="l">小計</span><span class="v">900,000</span></div>
+      <div class="qrow disc"><span class="l">專案整合優惠</span><span class="v">−100,000</span></div>
+      <div class="qtotal tight"><span class="l">專案總價（未稅）</span><span class="v"><small>NT$</small><span class="hl">800,000</span></span></div>
     </div>
-    <p class="qsub reveal" style="transition-delay:.2s">營業稅 5% 另計（含稅參考 <b>NT$ 840,000</b>）。付款方式：簽約 <b>40%</b> · 交付驗收 <b>50%</b> · 保固期滿 <b>10%</b>，含上線後 30 天免費保固。年度維護與行動 App 為選配，另行報價。</p>
+    <p class="qsub reveal" style="transition-delay:.2s">營業稅 5% 另計。付款方式：簽約 <b>40%</b> · 交付驗收 <b>50%</b> · 保固期滿 <b>10%</b>，含上線後 30 天免費保固。年度維護與行動 App 為選配，另行報價。</p>
   </div>
 </section>
 
