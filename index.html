@@ -3,26 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kimi 內部營運平台 · 系統建置提案</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1a1a'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='18' font-weight='800' fill='%23ffce00' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
-<meta name="description" content="Kimi 公司內部營運平台系統建置提案 — 差勤、薪資、專案獎金分潤、內部知識庫與員工帳號權限；12 週完工，報價與時程一頁看懂。">
-<meta property="og:title" content="Kimi 內部營運平台 · 系統建置提案">
-<meta property="og:description" content="一套系統，管好人事差勤、專案獎金分潤與內部知識庫。12 週完工。">
+<title>Kimi 內部營運平台 — 系統建置提案</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%231a1a1a'/%3E%3Ctext x='32' y='45' font-family='system-ui,sans-serif' font-size='38' font-weight='800' fill='%23ffce00' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Kimi 公司內部營運平台系統建置提案 — 差勤、薪資、專案獎金分潤、內部知識庫與員工帳號權限。特色功能、12 週時程與報價。萊乾資訊 LaiQuan。">
+<meta property="og:title" content="Kimi 內部營運平台 — 系統建置提案">
+<meta property="og:description" content="一套系統，管好人事差勤、專案獎金分潤與內部知識庫。12 週完工。萊乾資訊 LaiQuan。">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* 品牌色取自萊乾 laiquan.co：奶油底 #fffbec · 黑 #1a1a1a · 亮黃金 #ffce00 · 深金 #9a7a00 */
-    --bg:#fffbec; --bg-alt:#fffef8; --bg-tint:#f7efcf;
-    --ink:#1a1a1a; --gray:#6d6552; --gray2:#9c927b; --line:rgba(26,20,0,.12);
-    --yellow:#ffce00; --yellow-soft:#ffd94d; --yellow-tint:rgba(255,206,0,.18);
-    --gold:#9a7a00; --gold-deep:#5a4a00;
-    --dark:#1a1a1a; --dark-soft:#cfc4a3;
-    --sans:-apple-system,BlinkMacSystemFont,"PingFang TC","Segoe UI","Noto Sans TC",sans-serif;
-    --serif:"Noto Serif TC",serif;
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --bg:#fffbec; --bg-alt:#ffffff; --bg-tint:#fff6d6;
+    --ink:#1a1a1a; --ink-2:#000000; --ink-soft:#2e2a1c;
+    --gray:#6b6357; --gray2:#9c9384; --line:rgba(26,26,26,.11);
+    --yellow:#ffce00; --yellow-soft:#ffe680; --yellow-wash:#fff6d6;
+    --sans:"Noto Sans TC",-apple-system,BlinkMacSystemFont,"PingFang TC","Segoe UI",sans-serif;
+    --display:"Baloo 2","Noto Sans TC",-apple-system,"PingFang TC",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
     --ease:cubic-bezier(.16,1,.3,1);
     --maxw:940px;
   }
@@ -33,155 +31,139 @@
 
   /* progress + header */
   .progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:80;background:transparent;pointer-events:none;}
-  .progress i{display:block;height:100%;width:0;background:var(--yellow);transition:width .5s var(--ease);}
+  .progress i{display:block;height:100%;width:0;background:var(--ink);transition:width .5s var(--ease);}
   @media(max-width:640px){.progress{height:4px;}}
   .topbar{position:fixed;inset:0 0 auto 0;z-index:70;display:flex;align-items:center;justify-content:space-between;
     padding:13px clamp(18px,4vw,44px);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
-    background:rgba(255,251,236,.78);border-bottom:1px solid rgba(26,20,0,.08);}
-  .topbar .brand{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;letter-spacing:.01em;}
-  .topbar .brand .mk{height:24px;width:24px;border-radius:7px;background:var(--dark);color:var(--yellow);display:grid;place-items:center;font-weight:800;font-size:14px;}
-  .topbar .links{display:flex;gap:20px;font-size:13.5px;font-weight:600;color:var(--gray);align-items:center;}
+    background:rgba(255,251,236,.8);border-bottom:1.5px solid var(--ink);}
+  .topbar .brand{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:700;letter-spacing:.01em;font-family:var(--display);}
+  .topbar .brand .mk{height:26px;width:26px;border-radius:8px;background:var(--ink);color:var(--yellow);display:flex;align-items:center;justify-content:center;flex:none;font-family:var(--display);font-weight:800;font-size:16px;}
+  .topbar .brand .co{color:var(--gray);font-weight:500;}
+  .topbar .links{display:flex;gap:20px;font-size:13.5px;font-weight:600;color:var(--gray);}
   .topbar .links a{transition:color .2s;}
-  .topbar .links a.demo{color:var(--gold);}
-  .topbar .links a:hover{color:var(--gold-deep);}
-  @media(max-width:640px){.topbar .links a:not(.demo){display:none;}}
+  .topbar .links a:hover{color:var(--ink);}
+  @media(max-width:640px){.topbar .links{display:none;}}
 
   /* dot nav */
   .nav{position:fixed;top:50%;right:max(14px,2vw);transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:13px;align-items:flex-end;}
   .nav button{position:relative;display:flex;align-items:center;cursor:pointer;background:none;border:0;padding:3px 0 3px 8px;}
-  .nav button::after{content:"";width:8px;height:8px;border-radius:999px;border:1.5px solid rgba(26,20,0,.32);background:transparent;
+  .nav button::after{content:"";width:8px;height:8px;border-radius:999px;border:1.5px solid rgba(26,26,26,.32);background:transparent;
     transition:transform .35s var(--ease),background .35s,border-color .35s;}
-  .nav button[data-active="true"]::after{background:var(--ink);border-color:var(--ink);transform:scale(1.55);}
-  .nav .lbl{margin-right:11px;font-size:12px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px);border:1px solid rgba(26,20,0,.08);border-radius:999px;padding:3px 11px;white-space:nowrap;
-    opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 4px 14px rgba(26,20,0,.1);}
+  .nav button[data-active="true"]::after{background:var(--ink);border-color:var(--ink);transform:scale(1.6);}
+  .nav .lbl{margin-right:11px;font-size:12px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.9);backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);border:1.5px solid var(--ink);border-radius:999px;padding:3px 11px;white-space:nowrap;
+    opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:2px 3px 0 rgba(26,26,26,.16);}
   .nav button:hover .lbl,.nav button:focus-visible .lbl{opacity:1;transform:none;}
   @media(max-width:820px){.nav{display:none;}}
 
   /* slides */
   .slide{min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;
-    justify-content:center;align-items:center;text-align:center;padding:104px clamp(22px,5vw,40px) 84px;position:relative;}
+    justify-content:center;align-items:center;text-align:center;padding:110px clamp(22px,5vw,40px) 84px;position:relative;}
   .slide.alt{background:var(--bg-alt);}
   .slide.tint{background:var(--bg-tint);}
-  .slide.ink{background:var(--dark);color:#f5efdb;}
+  .slide.punch{background:var(--yellow);}
   .inner{width:100%;max-width:var(--maxw);}
   .wide{max-width:1120px;}
 
-  .eyebrow{font-size:clamp(14px,1.7vw,17px);font-weight:700;color:var(--gold);letter-spacing:.02em;margin-bottom:18px;}
-  .eyebrow.gold{color:var(--gold-deep);}
-  .ink .eyebrow{color:var(--yellow);}
-  h1{font-size:clamp(38px,7vw,82px);font-weight:700;letter-spacing:-.03em;line-height:1.05;text-wrap:balance;}
-  h2{font-size:clamp(30px,4.8vw,56px);font-weight:700;letter-spacing:-.025em;line-height:1.1;text-wrap:balance;}
-  .lead{font-size:clamp(17px,2.3vw,22px);font-weight:400;color:var(--gray);line-height:1.6;max-width:720px;margin:22px auto 0;letter-spacing:.005em;}
-  .ink .lead{color:var(--dark-soft);}
-  .fine{font-size:13.5px;color:var(--gray2);margin-top:16px;letter-spacing:.02em;}
-  .ink .fine{color:#a99f82;}
+  .eyebrow{display:inline-block;font-size:12.5px;font-weight:700;color:var(--yellow);background:var(--ink);
+    letter-spacing:.02em;padding:6px 15px;border-radius:999px;margin-bottom:20px;}
+  h1{font-family:var(--display);font-size:clamp(40px,7.4vw,88px);font-weight:800;letter-spacing:-.01em;line-height:1.02;text-wrap:balance;}
+  h2{font-family:var(--display);font-size:clamp(31px,4.9vw,60px);font-weight:800;letter-spacing:-.005em;line-height:1.08;text-wrap:balance;}
+  .lead{font-size:clamp(17px,2.3vw,23px);font-weight:400;color:var(--gray);line-height:1.55;max-width:730px;margin:22px auto 0;letter-spacing:.005em;}
+  .fine{font-size:13.5px;color:var(--gray2);margin-top:16px;letter-spacing:.02em;font-weight:500;}
+  .punch .lead{color:var(--ink-soft);}
+  .punch .fine{color:#5c5322;}
 
-  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--yellow);color:var(--ink);font-size:16px;font-weight:700;
-    padding:13px 26px;border-radius:980px;transition:transform .25s var(--ease),background .25s,box-shadow .25s;margin-top:8px;}
-  .cta:hover{transform:scale(1.035);background:var(--yellow-soft);box-shadow:0 12px 28px rgba(255,206,0,.42);}
-  .cta.ghost{background:transparent;color:var(--ink);border:1.5px solid rgba(26,20,0,.28);font-weight:600;}
-  .cta.ghost:hover{background:rgba(26,20,0,.05);box-shadow:none;}
-  .ink .cta.ghost{color:#f5efdb;border-color:rgba(255,255,255,.35);}
-  .ink .cta.ghost:hover{background:rgba(255,255,255,.08);}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-size:16px;font-weight:700;
+    padding:14px 28px;border-radius:980px;font-family:var(--display);
+    transition:transform .22s var(--ease),box-shadow .22s;margin-top:8px;box-shadow:3px 4px 0 rgba(26,26,26,.18);}
+  .cta:hover{transform:translate(-1px,-2px);box-shadow:5px 7px 0 rgba(26,26,26,.22);}
+  .cta.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink);box-shadow:3px 4px 0 rgba(26,26,26,.14);}
+  .cta.ghost:hover{background:rgba(26,26,26,.05);}
   .linkrow{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px;}
 
-  .scrollhint{position:absolute;bottom:32px;left:0;right:0;margin:0 auto;width:max-content;color:var(--gray2);font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:7px;}
-  .scrollhint .chev{width:15px;height:15px;border-right:1.6px solid var(--gray2);border-bottom:1.6px solid var(--gray2);transform:rotate(45deg);animation:bob 1.8s var(--ease) infinite;}
+  .scrollhint{position:absolute;bottom:34px;left:0;right:0;margin:0 auto;width:max-content;color:var(--ink-soft);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:7px;}
+  .scrollhint .chev{width:16px;height:16px;border-right:2px solid var(--ink-soft);border-bottom:2px solid var(--ink-soft);transform:rotate(45deg);animation:bob 1.8s var(--ease) infinite;}
   @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.85}50%{transform:rotate(45deg) translate(3px,3px);opacity:.35}}
 
-  /* grids */
-  .grid{display:grid;gap:clamp(16px,2.4vw,24px);margin-top:44px;text-align:left;}
+  /* feature grid — bordered cards with hard offset shadow (萊乾 box motif) */
+  .grid{display:grid;gap:clamp(15px,2.2vw,22px);margin-top:44px;text-align:left;}
   .g4{grid-template-columns:repeat(4,1fr);}
   .g3{grid-template-columns:repeat(3,1fr);}
   .g2{grid-template-columns:repeat(2,1fr);}
   @media(max-width:820px){.g4,.g3{grid-template-columns:1fr 1fr;}.g2{grid-template-columns:1fr;}}
   @media(max-width:520px){.g4,.g3{grid-template-columns:1fr;}}
-  .cell{background:var(--bg-alt);border:1px solid var(--line);border-radius:16px;padding:22px 20px;box-shadow:0 2px 10px rgba(26,20,0,.03);}
-  .slide.alt .cell{background:var(--bg-tint);}
-  .cell .k{font-size:clamp(16px,1.9vw,19px);font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .cell{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:20px 18px;box-shadow:3px 4px 0 rgba(26,26,26,.1);}
+  .cell .tp{display:inline-block;font-family:var(--display);font-size:11px;font-weight:800;color:var(--ink);background:var(--yellow);border:1.5px solid var(--ink);border-radius:7px;padding:1px 9px;margin-bottom:11px;letter-spacing:.02em;}
+  .cell .k{font-family:var(--display);font-size:clamp(16px,1.95vw,19px);font-weight:700;color:var(--ink);margin-bottom:7px;}
   .cell .d{font-size:14px;color:var(--gray);line-height:1.6;}
-  .cell .num{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px;font-family:var(--mono);}
-  .cell .tp{display:inline-block;font-size:11px;font-weight:800;color:var(--gold-deep);background:var(--yellow-tint);border-radius:6px;padding:2px 8px;margin-bottom:10px;letter-spacing:.04em;}
 
-  /* feature preview */
-  .pv-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;text-align:left;}
+  /* spotlight (mockup + text) */
+  .pv-wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;text-align:left;}
   @media(max-width:820px){.pv-wrap{grid-template-columns:1fr;}}
   .pv-side .why{list-style:none;display:flex;flex-direction:column;gap:13px;margin:20px 0 26px;}
-  .pv-side .why li{font-size:15.5px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;}
-  .pv-side .why li::before{content:"";position:absolute;left:0;top:6px;width:12px;height:12px;border-radius:4px;background:var(--yellow);border:1px solid var(--gold);}
+  .pv-side .why li{font-size:15.5px;color:var(--ink);padding-left:26px;position:relative;line-height:1.5;font-weight:500;}
+  .pv-side .why li::before{content:"";position:absolute;left:0;top:6px;width:11px;height:11px;border-radius:4px;background:var(--yellow);border:1.5px solid var(--ink);}
 
-  /* UI mock: 分潤可見性 */
+  /* device mock (分潤可見性) */
   .mock{display:flex;flex-direction:column;gap:16px;}
-  .uiframe{border-radius:16px;border:1px solid var(--line);background:#fff;box-shadow:0 20px 50px rgba(26,20,0,.13),0 4px 14px rgba(26,20,0,.05);overflow:hidden;}
-  .uiframe .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--bg-tint);}
-  .uiframe .bar .role{font-size:11.5px;font-weight:800;letter-spacing:.02em;}
-  .uiframe .bar .role.mgr{color:var(--ink);}
-  .uiframe .bar .role.self{color:var(--gold-deep);}
-  .uiframe .bar .pill{margin-left:auto;font-size:10px;font-weight:700;padding:2px 9px;border-radius:999px;}
-  .uiframe .bar .pill.on{background:var(--yellow-tint);color:var(--gold-deep);}
-  .uiframe .bar .pill.lock{background:var(--dark);color:var(--yellow);}
+  .uiframe{border-radius:16px;overflow:hidden;background:#fff;border:2px solid var(--ink);box-shadow:6px 8px 0 rgba(26,26,26,.14);}
+  .uiframe .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--yellow-wash);border-bottom:1.5px solid var(--ink);}
+  .uiframe .bar .role{font-family:var(--display);font-size:12.5px;font-weight:700;color:var(--ink);}
+  .uiframe .bar .pill{margin-left:auto;font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:999px;border:1.5px solid var(--ink);}
+  .pill.on{background:var(--yellow);color:var(--ink);}
+  .pill.lock{background:var(--ink);color:var(--yellow);}
   table.mt{width:100%;border-collapse:collapse;font-size:13px;}
-  table.mt td{padding:9px 14px;border-top:1px solid var(--line);}
+  table.mt td{padding:9px 14px;border-top:1px solid #efe6cd;}
   table.mt tr:first-child td{border-top:0;}
   table.mt .nm{font-weight:600;color:var(--ink);}
-  table.mt .amt{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);color:var(--ink);white-space:nowrap;}
-  table.mt tr.me{background:var(--yellow-tint);}
-  table.mt tr.me .nm{color:var(--gold-deep);}
-  table.mt tr.me .amt{color:var(--gold-deep);font-weight:700;}
+  table.mt .amt{text-align:right;font-family:var(--display);font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap;}
+  table.mt tr.me{background:var(--yellow-wash);}
   .mask{color:var(--gray2);letter-spacing:.12em;}
-  .mock .cap{font-size:12.5px;color:var(--gray2);text-align:center;}
+  .mock .cap{font-size:12.5px;color:var(--gray);text-align:center;font-weight:500;}
 
   /* timeline */
   .tl{display:flex;flex-direction:column;gap:2px;margin-top:40px;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;}
-  .tl .step{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:15px 2px;border-bottom:1px solid var(--line);align-items:baseline;}
-  @media(max-width:520px){.tl .step{grid-template-columns:82px 1fr;gap:12px;}}
-  .tl .when{font-size:14.5px;font-weight:700;color:var(--gray);font-variant-numeric:tabular-nums;}
-  .tl .what{font-size:15.5px;color:var(--ink);}
-  .tl .what small{color:var(--gray);font-size:13.5px;}
-  .tl .step.mile .when{color:var(--gold-deep);}
-  .tl .step.mile{background:var(--yellow-tint);border-radius:12px;padding:15px 16px;border-bottom-color:transparent;margin:3px 0;}
-  .tl .step.mile .what b{color:var(--gold-deep);}
-  .tl .tag{display:inline-block;font-size:11px;font-weight:800;color:var(--ink);background:var(--yellow);border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:middle;}
+  .tl .step{display:grid;grid-template-columns:132px 1fr;gap:20px;padding:15px 4px;border-bottom:1px solid var(--line);align-items:baseline;}
+  @media(max-width:520px){.tl .step{grid-template-columns:88px 1fr;gap:12px;}}
+  .tl .when{font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--gray);font-variant-numeric:tabular-nums;}
+  .tl .what{font-size:15.5px;color:var(--ink);font-weight:500;}
+  .tl .what small{color:var(--gray);font-size:13px;font-weight:400;}
+  .tl .step.mile{background:var(--yellow-wash);border:1.5px solid var(--ink);border-radius:12px;padding:15px 16px;margin:4px 0;}
+  .tl .step.mile .when{color:var(--ink);}
+  .tl .step.mile .what b{color:var(--ink);font-weight:800;}
+  .tl .tag{display:inline-block;font-size:11px;font-weight:700;color:var(--yellow);background:var(--ink);border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:middle;}
 
   /* quote */
-  .qlist{margin-top:36px;text-align:left;max-width:680px;margin-left:auto;margin-right:auto;}
-  .qrow{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:14px 2px;border-bottom:1px solid var(--line);}
-  .qrow .l{font-size:16px;font-weight:600;}
-  .qrow .l small{display:block;font-size:12.5px;color:var(--gray2);font-weight:400;margin-top:3px;letter-spacing:.01em;}
-  .qrow .v{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;font-family:var(--mono);white-space:nowrap;}
-  .qtotal{display:flex;justify-content:space-between;align-items:baseline;margin-top:22px;padding-top:20px;border-top:2px solid var(--ink);}
-  .qtotal .l{font-size:18px;font-weight:700;}
-  .qtotal .v{font-size:clamp(32px,4.2vw,46px);font-weight:800;color:var(--gold-deep);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
-  .qtotal .v small{font-size:16px;font-weight:700;margin-right:4px;color:var(--gold-deep);}
-  .qtotal .v .hl{background:linear-gradient(transparent 62%,var(--yellow) 62%);padding:0 3px;}
-  .qsub{font-size:14px;color:var(--gray);margin-top:18px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;}
-  .qsub b{color:var(--ink);font-weight:700;}
-  /* compact quote with grouped custom items */
-  .qlist.compact{margin-top:24px;}
-  .qlist.compact .qrow{padding:9px 2px;}
-  .qlist.compact .qrow .l{font-size:15px;}
-  .qgroup{margin:16px 0 0;padding-bottom:4px;font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--gold-deep);display:flex;align-items:center;gap:8px;}
-  .qgroup::before{content:"";width:16px;height:2px;background:var(--yellow);border-radius:2px;}
-  .qrow .l .ct{display:inline-block;font-size:10px;font-weight:800;color:var(--gold-deep);background:var(--yellow-tint);border-radius:5px;padding:1px 6px;margin-right:7px;vertical-align:1.5px;letter-spacing:.04em;}
-  .qrow.subtot{border-bottom:0;padding-top:14px;}
-  .qrow.subtot .l,.qrow.subtot .v{color:var(--gray);font-weight:600;}
-  .qrow.disc{border-bottom:0;padding:5px 2px;}
-  .qrow.disc .l,.qrow.disc .v{color:var(--gold);font-weight:700;}
-  .qtotal.tight{margin-top:12px;padding-top:16px;}
-  /* 報價頁項目多，壓縮該頁高度使其單屏容納 */
-  #s10{padding-top:74px;padding-bottom:48px;}
-  #s10 h2{font-size:clamp(22px,3vw,32px);}
-  #s10 .eyebrow{margin-bottom:10px;}
-  #s10 .qlist.compact{margin-top:16px;}
-  #s10 .qlist.compact .qrow{padding:6px 2px;}
-  #s10 .qlist.compact .qrow .l{font-size:14.5px;}
-  #s10 .qlist.compact .qrow .l small{margin-top:1px;font-size:12px;}
+  .qlist{margin-top:34px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;}
+  .qrow{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-bottom:1px solid var(--line);}
+  .qrow .l{font-size:15.5px;font-weight:600;}
+  .qrow .l small{display:block;font-size:12.5px;color:var(--gray2);font-weight:400;margin-top:3px;line-height:1.5;}
+  .qrow .l .ct{display:inline-block;font-family:var(--display);font-size:10px;font-weight:800;color:var(--ink);background:var(--yellow);border:1.5px solid var(--ink);border-radius:6px;padding:0 7px;margin-right:8px;vertical-align:1.5px;}
+  .qrow .v{font-family:var(--display);font-size:15.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .qgroup{font-family:var(--display);font-weight:800;font-size:12.5px;color:var(--ink);margin:16px 0 2px;display:flex;align-items:center;gap:9px;letter-spacing:.03em;}
+  .qgroup::before{content:"";width:18px;height:3px;background:var(--yellow);border:1px solid var(--ink);border-radius:2px;}
+  .qsum{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-size:14px;color:var(--gray);}
+  .qsum .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);font-family:var(--display);}
+  .qsum.disc .v{color:var(--ink);}
+  .qtotal{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:16px 22px;background:var(--ink);color:#fff;border-radius:14px;box-shadow:5px 6px 0 rgba(26,26,26,.18);}
+  .qtotal .l{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:.5px;}
+  .qtotal .v{font-family:var(--display);font-size:clamp(30px,4.4vw,46px);font-weight:800;letter-spacing:-.01em;font-variant-numeric:tabular-nums;color:var(--yellow);}
+  .qtotal .v small{font-size:16px;font-weight:600;opacity:.85;margin-right:4px;}
+  .qnote{font-size:13px;color:var(--gray);margin-top:16px;text-align:center;font-weight:500;line-height:1.6;}
+
+  /* 報價頁項目多，壓縮高度使其單屏容納 */
+  #s10{padding-top:82px;padding-bottom:52px;}
+  #s10 h2{font-size:clamp(24px,3.4vw,36px);}
+  #s10 .qlist{margin-top:20px;}
+  #s10 .qrow{padding:8px 0;}
+  #s10 .qrow .l{font-size:14.5px;}
+  #s10 .qrow .l small{margin-top:1px;font-size:11.5px;}
   #s10 .qgroup{margin-top:12px;}
-  #s10 .qtotal.tight{margin-top:10px;padding-top:13px;}
-  #s10 .qtotal .v{font-size:clamp(28px,3.6vw,38px);}
-  #s10 .qsub{margin-top:12px;font-size:12.5px;line-height:1.6;}
-  @media(min-height:1000px){#s10{padding-top:104px;padding-bottom:84px;}}
+  #s10 .qsum{padding:6px 0;}
+  #s10 .qtotal{margin-top:11px;padding:13px 20px;}
+  #s10 .qnote{margin-top:12px;font-size:12px;}
+  @media(min-height:1040px){#s10{padding-top:110px;padding-bottom:84px;}}
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
@@ -198,11 +180,10 @@
 <div class="progress"><i id="pfill"></i></div>
 
 <header class="topbar">
-  <a class="brand" href="#s1"><span class="mk">K</span>Kimi 內部營運平台 · 系統建置提案</a>
+  <a class="brand" href="#s1"><span class="mk">K</span>Kimi 內部營運平台<span class="co">· 萊乾資訊</span></a>
   <nav class="links">
-    <a href="#s10">報價</a>
-    <a href="#s9">時程</a>
-    <a class="demo" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">線上 Demo ›</a>
+    <a href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">線上 Demo</a>
+    <a href="https://laiquan.co" target="_blank" rel="noopener">laiquan.co</a>
   </nav>
 </header>
 
@@ -245,7 +226,7 @@
 <!-- 4 SOLUTION -->
 <section class="slide tint" id="s4" data-label="解決方案">
   <div class="inner">
-    <div class="eyebrow gold reveal">解決方案</div>
+    <div class="eyebrow reveal">解決方案</div>
     <h2 class="reveal" style="transition-delay:.05s">一套系統，<br>四件事一起管好。</h2>
     <p class="lead reveal" style="transition-delay:.12s">以多租戶白標架構打造貴公司專屬平台，涵蓋人事差勤全流程，並依需求客製三大關鍵模組：<b style="color:var(--ink)">專案獎金分潤</b>、<b style="color:var(--ink)">內部知識庫</b>、<b style="color:var(--ink)">員工帳號權限</b>。</p>
   </div>
@@ -273,7 +254,7 @@
     <div class="pv-wrap">
       <div class="mock reveal">
         <div class="uiframe">
-          <div class="bar"><span class="role mgr">主管視角</span><span class="pill on">可見全部分潤</span></div>
+          <div class="bar"><span class="role">主管視角</span><span class="pill on">可見全部分潤</span></div>
           <table class="mt">
             <tr><td class="nm">陳專案（負責人）</td><td class="amt">30,000</td></tr>
             <tr><td class="nm">林設計</td><td class="amt">24,000</td></tr>
@@ -281,7 +262,7 @@
           </table>
         </div>
         <div class="uiframe">
-          <div class="bar"><span class="role self">組員視角（林設計）</span><span class="pill lock">只見自己</span></div>
+          <div class="bar"><span class="role">組員視角（林設計）</span><span class="pill lock">只見自己</span></div>
           <table class="mt">
             <tr class="me"><td class="nm">林設計（你）</td><td class="amt">24,000</td></tr>
             <tr><td class="nm mask">●●●</td><td class="amt mask">＊＊,＊＊＊</td></tr>
@@ -292,7 +273,7 @@
       </div>
       <div class="pv-side">
         <div class="eyebrow reveal">核心亮點 · 專案獎金分潤</div>
-        <h2 class="reveal" style="transition-delay:.05s;font-size:clamp(26px,3.4vw,40px)">分潤透明留痕，<br>但只有該看的人看得到。</h2>
+        <h2 class="reveal" style="transition-delay:.05s;font-size:clamp(26px,3.4vw,42px)">分潤透明留痕，<br>但只有該看的人看得到。</h2>
         <ul class="why reveal" style="transition-delay:.1s">
           <li>兩種模式：獎金池 × 百分比，或直接填每人金額</li>
           <li>比例／金額隨時可調，每次調整自動留下異動紀錄</li>
@@ -326,15 +307,15 @@
 </section>
 
 <!-- 8 TECH & SECURITY -->
-<section class="slide ink" id="s8" data-label="技術與資安">
+<section class="slide tint" id="s8" data-label="技術與資安">
   <div class="inner wide">
     <div class="eyebrow reveal">技術與資安</div>
     <h2 class="reveal" style="transition-delay:.05s">穩定、安全、隨處可用。</h2>
     <div class="grid g4 reveal" style="transition-delay:.12s">
-      <div class="cell" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">雲端 SaaS</div><div class="d" style="color:var(--dark-soft)">免自建機房，開瀏覽器即用，隨處可存取。</div></div>
-      <div class="cell" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">逐列權限 RLS</div><div class="d" style="color:var(--dark-soft)">資料庫層級的權限控管，分潤等敏感資料多一層保護。</div></div>
-      <div class="cell" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">自動部署</div><div class="d" style="color:var(--dark-soft)">更新即時上線，維運穩定、不中斷。</div></div>
-      <div class="cell" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">行動友善</div><div class="d" style="color:var(--dark-soft)">手機、平板、電腦皆可操作，員工隨手打卡。</div></div>
+      <div class="cell"><div class="k">雲端 SaaS</div><div class="d">免自建機房，開瀏覽器即用，隨處可存取。</div></div>
+      <div class="cell"><div class="k">逐列權限 RLS</div><div class="d">資料庫層級的權限控管，分潤等敏感資料多一層保護。</div></div>
+      <div class="cell"><div class="k">自動部署</div><div class="d">更新即時上線，維運穩定、不中斷。</div></div>
+      <div class="cell"><div class="k">行動友善</div><div class="d">手機、平板、電腦皆可操作，員工隨手打卡。</div></div>
     </div>
   </div>
 </section>
@@ -346,24 +327,24 @@
     <h2 class="reveal" style="transition-delay:.05s">12 週完工，三個月上線。</h2>
     <div class="tl reveal" style="transition-delay:.12s">
       <div class="step"><span class="when">第 1–2 週</span><span class="what">需求訪談與流程盤點</span></div>
-      <div class="step"><span class="when">第 3–5 週</span><span class="what">平台建置：<small>帳號權限 · 組織人事 · 差勤核心</small></span></div>
+      <div class="step"><span class="when">第 3–5 週</span><span class="what">平台建置<small>　帳號權限 · 組織人事 · 差勤核心</small></span></div>
       <div class="step"><span class="when">第 6–8 週</span><span class="what">請假簽核 · 薪資 · 招募 KPI</span></div>
-      <div class="step"><span class="when">第 9–10 週</span><span class="what">客製三模組：<small>專案分潤 · 知識庫 · 帳號配發</small></span></div>
+      <div class="step"><span class="when">第 9–10 週</span><span class="what">客製三模組<small>　專案分潤 · 知識庫 · 帳號配發</small></span></div>
       <div class="step"><span class="when">第 11 週</span><span class="what">整合測試與資料匯入</span></div>
       <div class="step mile"><span class="when">第 11 週末</span><span class="what"><b>交付測試版</b><span class="tag">里程碑</span>　供全面試用驗收</span></div>
       <div class="step"><span class="when">第 12 週</span><span class="what">教育訓練與上線輔導</span></div>
       <div class="step mile"><span class="when">第 12 週末</span><span class="what"><b>正式上線</b><span class="tag">里程碑</span>　啟用正式網址、切換正式站</span></div>
     </div>
-    <p class="fine reveal" style="transition-delay:.2s">總期程約 3 個月，自簽約日起算；里程碑日期依實際啟動時間調整。</p>
+    <p class="fine reveal" style="transition-delay:.2s">＊實際起訖以簽約後確認為準，總期程約 3 個月（12 週）。</p>
   </div>
 </section>
 
 <!-- 10 QUOTE -->
 <section class="slide tint" id="s10" data-label="報價">
   <div class="inner">
-    <div class="eyebrow gold reveal">專案報價</div>
+    <div class="eyebrow reveal">專案報價</div>
     <h2 class="reveal" style="transition-delay:.05s">一次建置，長期使用。</h2>
-    <div class="qlist compact reveal" style="transition-delay:.12s">
+    <div class="qlist reveal" style="transition-delay:.12s">
       <div class="qrow"><span class="l">平台建置與多租戶白標基礎<small>系統架構 · 帳號認證 · 租戶／品牌設定 · 權限模型</small></span><span class="v">120,000</span></div>
       <div class="qrow"><span class="l">HR 差勤核心<small>組織人事 80k · 差勤 110k · 請假簽核 70k · 薪資 90k</small></span><span class="v">350,000</span></div>
       <div class="qrow"><span class="l">招募 ATS 與 KPI 績效</span><span class="v">60,000</span></div>
@@ -374,25 +355,24 @@
       <div class="qrow"><span class="l"><i class="ct">客製</i>內部知識庫<small>專案文件庫 · 私有雲端儲存</small></span><span class="v">50,000</span></div>
       <div class="qrow"><span class="l"><i class="ct">客製</i>員工帳號權限配發<small>帳號建立 · 密碼配發 · 角色權限</small></span><span class="v">30,000</span></div>
       <div class="qrow"><span class="l"><i class="ct">客製</i>客製化官網<small>形象官網 · RWD 響應式 · 前台設計</small></span><span class="v">100,000</span></div>
-      <div class="qrow subtot"><span class="l">小計</span><span class="v">900,000</span></div>
-      <div class="qrow disc"><span class="l">專案整合優惠</span><span class="v">−100,000</span></div>
-      <div class="qtotal tight"><span class="l">專案總價（未稅）</span><span class="v"><small>NT$</small><span class="hl">800,000</span></span></div>
+      <div class="qsum"><span>小計</span><span class="v">900,000</span></div>
+      <div class="qsum disc"><span>專案整合優惠</span><span class="v">− 100,000</span></div>
+      <div class="qtotal"><span class="l">專案總價（未稅）</span><span class="v"><small>NT$</small>800,000</span></div>
     </div>
-    <p class="qsub reveal" style="transition-delay:.2s">營業稅 5% 另計。付款方式：簽約 <b>40%</b> · 交付驗收 <b>50%</b> · 保固期滿 <b>10%</b>，含上線後 30 天免費保固。年度維護與行動 App 為選配，另行報價。</p>
+    <p class="qnote reveal" style="transition-delay:.2s">營業稅 5% 另計　·　簽約 40% / 交付驗收 50% / 保固期滿 10%　·　含上線後 30 天免費保固　·　年度維護與行動 App 為選配，另行報價</p>
   </div>
 </section>
 
 <!-- 11 CLOSING -->
-<section class="slide ink" id="s11" data-label="結尾">
+<section class="slide punch" id="s11" data-label="結尾">
   <div class="inner">
     <div class="eyebrow reveal">The pitch</div>
-    <h1 class="reveal" style="transition-delay:.05s;font-size:clamp(30px,5.2vw,60px)">把內部作業，<br>交給一套對的系統。</h1>
-    <p class="lead reveal" style="transition-delay:.12s">系統已實際建置完成、可立即點進去操作。歡迎現在就開啟線上 Demo 試用。</p>
-    <div class="linkrow reveal" style="transition-delay:.16s">
+    <h1 class="reveal" style="transition-delay:.05s;font-size:clamp(30px,5.2vw,62px)">把內部作業，<br>交給一套對的系統。</h1>
+    <div class="linkrow reveal" style="transition-delay:.14s">
       <a class="cta" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">開啟線上系統 Demo　›</a>
-      <a class="cta ghost" href="#s10">查看報價</a>
+      <a class="cta ghost" href="#s10">回看報價</a>
     </div>
-    <p class="fine reveal" style="transition-delay:.24s">線上系統　kimi-hr-web.vercel.app</p>
+    <p class="fine reveal" style="transition-delay:.24s">萊乾資訊　LaiQuan Tech　·　把好點子通電上線 ⚡</p>
   </div>
 </section>
 
