@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kimi 內部營運平台 · 系統建置提案</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f4e79'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='18' font-weight='800' fill='white' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Kimi 公司內部營運平台系統建置提案 — 差勤、薪資、專案獎金分潤、內部知識庫與員工帳號權限；12 週完工，報價與時程一頁看懂。">
+<meta property="og:title" content="Kimi 內部營運平台 · 系統建置提案">
+<meta property="og:description" content="一套系統，管好人事差勤、專案獎金分潤與內部知識庫。12 週完工。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fbfbfd; --bg-alt:#ffffff; --bg-tint:#f4f6fa;
+    --ink:#1a1d21; --gray:#5f6570; --gray2:#8a909a; --line:rgba(15,30,55,.10);
+    --navy:#1f4e79; --navy-soft:#2f6ba3; --navy-ink:#173a5c;
+    --gold:#b7860b; --gold-soft:#d69e2e; --gold-tint:rgba(183,134,11,.10);
+    --navy-tint:rgba(31,78,121,.07);
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang TC","Segoe UI","Noto Sans TC",sans-serif;
+    --serif:"Noto Serif TC",serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --maxw:940px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{font-family:var(--sans);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  a{color:inherit;text-decoration:none;}
+
+  /* progress + header */
+  .progress{position:fixed;inset:0 0 auto 0;height:2px;z-index:80;background:transparent;pointer-events:none;}
+  .progress i{display:block;height:100%;width:0;background:var(--navy);transition:width .5s var(--ease);}
+  @media(max-width:640px){.progress{height:4px;}}
+  .topbar{position:fixed;inset:0 0 auto 0;z-index:70;display:flex;align-items:center;justify-content:space-between;
+    padding:13px clamp(18px,4vw,44px);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    background:rgba(251,251,253,.72);border-bottom:1px solid rgba(15,30,55,.06);}
+  .topbar .brand{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;letter-spacing:.01em;}
+  .topbar .brand .mk{height:24px;width:24px;border-radius:7px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;}
+  .topbar .links{display:flex;gap:20px;font-size:13.5px;font-weight:500;color:var(--gray);align-items:center;}
+  .topbar .links a{transition:color .2s;}
+  .topbar .links a.demo{color:var(--navy);font-weight:600;}
+  .topbar .links a:hover{color:var(--navy-soft);}
+  @media(max-width:640px){.topbar .links a:not(.demo){display:none;}}
+
+  /* dot nav */
+  .nav{position:fixed;top:50%;right:max(14px,2vw);transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:13px;align-items:flex-end;}
+  .nav button{position:relative;display:flex;align-items:center;cursor:pointer;background:none;border:0;padding:3px 0 3px 8px;}
+  .nav button::after{content:"";width:8px;height:8px;border-radius:999px;border:1.5px solid rgba(15,30,55,.28);background:transparent;
+    transition:transform .35s var(--ease),background .35s,border-color .35s;}
+  .nav button[data-active="true"]::after{background:var(--navy);border-color:var(--navy);transform:scale(1.55);}
+  .nav .lbl{margin-right:11px;font-size:12px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.9);backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);border:1px solid rgba(15,30,55,.06);border-radius:999px;padding:3px 11px;white-space:nowrap;
+    opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 4px 14px rgba(15,30,55,.08);}
+  .nav button:hover .lbl,.nav button:focus-visible .lbl{opacity:1;transform:none;}
+  @media(max-width:820px){.nav{display:none;}}
+
+  /* slides */
+  .slide{min-height:100svh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;text-align:center;padding:104px clamp(22px,5vw,40px) 84px;position:relative;}
+  .slide.alt{background:var(--bg-alt);}
+  .slide.tint{background:var(--bg-tint);}
+  .slide.ink{background:#12283f;color:#eaf1f8;}
+  .inner{width:100%;max-width:var(--maxw);}
+  .wide{max-width:1120px;}
+
+  .eyebrow{font-size:clamp(14px,1.7vw,17px);font-weight:600;color:var(--navy-soft);letter-spacing:.02em;margin-bottom:18px;}
+  .eyebrow.gold{color:var(--gold);}
+  .ink .eyebrow{color:var(--gold-soft);}
+  h1{font-size:clamp(38px,7vw,82px);font-weight:700;letter-spacing:-.03em;line-height:1.05;text-wrap:balance;}
+  h2{font-size:clamp(30px,4.8vw,56px);font-weight:700;letter-spacing:-.025em;line-height:1.1;text-wrap:balance;}
+  .lead{font-size:clamp(17px,2.3vw,22px);font-weight:400;color:var(--gray);line-height:1.6;max-width:720px;margin:22px auto 0;letter-spacing:.005em;}
+  .ink .lead{color:#b9c9dc;}
+  .fine{font-size:13.5px;color:var(--gray2);margin-top:16px;letter-spacing:.02em;}
+  .stat{font-size:clamp(80px,16vw,200px);font-weight:700;letter-spacing:-.04em;line-height:.9;color:var(--gold);}
+  .stat.navy{color:var(--navy);}
+  .stat-cap{font-size:clamp(16px,2vw,20px);color:var(--gray);margin-top:8px;}
+
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-size:16px;font-weight:600;
+    padding:13px 26px;border-radius:980px;transition:transform .25s var(--ease),background .25s,box-shadow .25s;margin-top:8px;}
+  .cta:hover{transform:scale(1.035);background:var(--navy-soft);box-shadow:0 12px 28px rgba(31,78,121,.3);}
+  .cta.ghost{background:transparent;color:var(--navy);border:1px solid rgba(31,78,121,.35);}
+  .cta.ghost:hover{background:var(--navy-tint);box-shadow:none;}
+  .ink .cta.ghost{color:#fff;border-color:rgba(255,255,255,.4);}
+  .ink .cta.ghost:hover{background:rgba(255,255,255,.08);}
+  .linkrow{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px;}
+
+  .scrollhint{position:absolute;bottom:32px;left:0;right:0;margin:0 auto;width:max-content;color:var(--gray2);font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:7px;}
+  .scrollhint .chev{width:15px;height:15px;border-right:1.6px solid var(--gray2);border-bottom:1.6px solid var(--gray2);transform:rotate(45deg);animation:bob 1.8s var(--ease) infinite;}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.85}50%{transform:rotate(45deg) translate(3px,3px);opacity:.35}}
+
+  /* grids */
+  .grid{display:grid;gap:clamp(16px,2.4vw,24px);margin-top:44px;text-align:left;}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g2{grid-template-columns:repeat(2,1fr);}
+  @media(max-width:820px){.g4,.g3{grid-template-columns:1fr 1fr;}.g2{grid-template-columns:1fr;}}
+  @media(max-width:520px){.g4,.g3{grid-template-columns:1fr;}}
+  .cell{background:var(--bg-alt);border:1px solid var(--line);border-radius:16px;padding:22px 20px;box-shadow:0 2px 10px rgba(15,30,55,.03);}
+  .slide.alt .cell{background:var(--bg-tint);}
+  .cell .k{font-size:clamp(16px,1.9vw,19px);font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .cell .d{font-size:14px;color:var(--gray);line-height:1.6;}
+  .cell .num{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;font-family:var(--mono);}
+  .cell .tp{display:inline-block;font-size:11px;font-weight:700;color:var(--gold);background:var(--gold-tint);border-radius:6px;padding:2px 8px;margin-bottom:10px;letter-spacing:.03em;}
+
+  /* feature preview (pv-wrap) */
+  .pv-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:center;text-align:left;}
+  @media(max-width:820px){.pv-wrap{grid-template-columns:1fr;}}
+  .pv-side .why{list-style:none;display:flex;flex-direction:column;gap:13px;margin:20px 0 26px;}
+  .pv-side .why li{font-size:15.5px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5;}
+  .pv-side .why li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:999px;background:var(--navy);}
+
+  /* UI mock: 分潤可見性 */
+  .mock{display:flex;flex-direction:column;gap:16px;}
+  .uiframe{border-radius:16px;border:1px solid var(--line);background:#fff;box-shadow:0 20px 50px rgba(15,30,55,.12),0 4px 14px rgba(15,30,55,.05);overflow:hidden;}
+  .uiframe .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--bg-tint);}
+  .uiframe .bar .role{font-size:11.5px;font-weight:700;letter-spacing:.02em;}
+  .uiframe .bar .role.mgr{color:var(--navy);}
+  .uiframe .bar .role.self{color:var(--gold);}
+  .uiframe .bar .pill{margin-left:auto;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px;}
+  .uiframe .bar .pill.on{background:var(--navy-tint);color:var(--navy);}
+  .uiframe .bar .pill.lock{background:var(--gold-tint);color:var(--gold);}
+  table.mt{width:100%;border-collapse:collapse;font-size:13px;}
+  table.mt td{padding:9px 14px;border-top:1px solid var(--line);}
+  table.mt tr:first-child td{border-top:0;}
+  table.mt .nm{font-weight:600;color:var(--ink);}
+  table.mt .amt{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);color:var(--navy-ink);white-space:nowrap;}
+  table.mt tr.me{background:var(--gold-tint);}
+  table.mt tr.me .nm{color:var(--gold);}
+  table.mt tr.me .amt{color:var(--gold);}
+  .mask{color:var(--gray2);letter-spacing:.12em;}
+  .mock .cap{font-size:12.5px;color:var(--gray2);text-align:center;}
+
+  /* timeline */
+  .tl{display:flex;flex-direction:column;gap:2px;margin-top:40px;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;}
+  .tl .step{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:15px 2px;border-bottom:1px solid var(--line);align-items:baseline;}
+  @media(max-width:520px){.tl .step{grid-template-columns:82px 1fr;gap:12px;}}
+  .tl .when{font-size:14.5px;font-weight:600;color:var(--gray);font-variant-numeric:tabular-nums;}
+  .tl .what{font-size:15.5px;color:var(--ink);}
+  .tl .what small{color:var(--gray);font-size:13.5px;}
+  .tl .step.mile .when{color:var(--navy);}
+  .tl .step.mile{background:var(--navy-tint);border-radius:12px;padding:15px 16px;border-bottom-color:transparent;margin:3px 0;}
+  .tl .step.mile .what b{color:var(--navy);}
+  .tl .tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--navy);border-radius:999px;padding:1px 9px;margin-left:8px;vertical-align:middle;}
+
+  /* quote */
+  .qlist{margin-top:36px;text-align:left;max-width:680px;margin-left:auto;margin-right:auto;}
+  .qrow{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:14px 2px;border-bottom:1px solid var(--line);}
+  .qrow .l{font-size:16px;font-weight:600;}
+  .qrow .l small{display:block;font-size:12.5px;color:var(--gray2);font-weight:400;margin-top:3px;letter-spacing:.01em;}
+  .qrow .v{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;font-family:var(--mono);white-space:nowrap;}
+  .qtotal{display:flex;justify-content:space-between;align-items:baseline;margin-top:22px;padding-top:20px;border-top:2px solid rgba(15,30,55,.14);}
+  .qtotal .l{font-size:18px;font-weight:700;}
+  .qtotal .v{font-size:clamp(32px,4.2vw,46px);font-weight:700;color:var(--gold);letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+  .qtotal .v small{font-size:16px;font-weight:600;margin-right:4px;color:var(--gold);}
+  .qsub{font-size:14px;color:var(--gray);margin-top:20px;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.7;}
+  .qsub b{color:var(--ink);font-weight:600;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+  .reveal.in{opacity:1;transform:none;}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-snap-type:none;scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    .scrollhint .chev{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="pfill"></i></div>
+
+<header class="topbar">
+  <a class="brand" href="#s1"><span class="mk">K</span>Kimi 內部營運平台 · 系統建置提案</a>
+  <nav class="links">
+    <a href="#s10">報價</a>
+    <a href="#s9">時程</a>
+    <a class="demo" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">線上 Demo ›</a>
+  </nav>
+</header>
+
+<nav class="nav" id="dots" aria-label="投影片導覽"></nav>
+
+<!-- 1 COVER -->
+<section class="slide" id="s1" data-label="封面">
+  <div class="inner">
+    <div class="eyebrow reveal">系統建置提案　·　2026</div>
+    <h1 class="reveal" style="transition-delay:.06s">一套系統，<br>管好人事與專案。</h1>
+    <p class="lead reveal" style="transition-delay:.12s">從差勤、薪資，到專案獎金分潤與內部知識庫 —<br>把散落各處的內部作業，整合進一個乾淨、好用、權限分明的平台。</p>
+    <p class="fine reveal" style="transition-delay:.18s">約 12 週完工　·　雲端 SaaS 交付　·　現已可線上試用</p>
+  </div>
+  <div class="scrollhint reveal" style="transition-delay:.3s">Scroll<span class="chev"></span></div>
+</section>
+
+<!-- 2 WHY -->
+<section class="slide alt" id="s2" data-label="現況">
+  <div class="inner">
+    <div class="eyebrow reveal">為什麼現在做</div>
+    <h2 class="reveal" style="transition-delay:.05s">好的團隊，<br>值得更好的工具。</h2>
+    <p class="lead reveal" style="transition-delay:.12s">差勤靠打卡機與紙本、獎金分潤用 Excel 私下算、專案資料散在各人電腦、每個人的權限難以掌控 —— 這些每天在發生的日常，值得一套整合、透明、好維護的系統來承接。</p>
+  </div>
+</section>
+
+<!-- 3 PAIN POINTS -->
+<section class="slide" id="s3" data-label="四大痛點">
+  <div class="inner wide">
+    <div class="eyebrow reveal">四個要解決的問題</div>
+    <h2 class="reveal" style="transition-delay:.05s">從這裡開始。</h2>
+    <div class="grid g4 reveal" style="transition-delay:.12s">
+      <div class="cell"><div class="k">差勤作業繁瑣</div><div class="d">打卡、請假、排班、結算分散在多處，人資每月重複耗費大量人力。</div></div>
+      <div class="cell"><div class="k">獎金分潤不透明</div><div class="d">專案分潤用 Excel 手算，容易出錯、難以留痕，而且人人都看得到彼此金額。</div></div>
+      <div class="cell"><div class="k">專案資料散落</div><div class="d">文件存在各自電腦與通訊軟體，新人接手找不到、離職資料帶不走。</div></div>
+      <div class="cell"><div class="k">權限難以管理</div><div class="d">誰能看什麼、誰是主管，缺乏一致的帳號與權限機制。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 SOLUTION -->
+<section class="slide tint" id="s4" data-label="解決方案">
+  <div class="inner">
+    <div class="eyebrow gold reveal">解決方案</div>
+    <h2 class="reveal" style="transition-delay:.05s">一套系統，<br>四件事一起管好。</h2>
+    <p class="lead reveal" style="transition-delay:.12s">以多租戶白標架構打造貴公司專屬平台，涵蓋人事差勤全流程，並依需求客製三大關鍵模組：<b style="color:var(--ink)">專案獎金分潤</b>、<b style="color:var(--ink)">內部知識庫</b>、<b style="color:var(--ink)">員工帳號權限</b>。</p>
+  </div>
+</section>
+
+<!-- 5 FEATURE OVERVIEW -->
+<section class="slide alt" id="s5" data-label="功能總覽">
+  <div class="inner wide">
+    <div class="eyebrow reveal">功能總覽</div>
+    <h2 class="reveal" style="transition-delay:.05s">人事作業，一站到位。</h2>
+    <div class="grid g3 reveal" style="transition-delay:.12s">
+      <div class="cell"><div class="k">差勤考勤</div><div class="d">打卡 · 班別 · 排班／班表審核 · 出勤結算 · 補休帳</div></div>
+      <div class="cell"><div class="k">請假與簽核</div><div class="d">假別設定 · 多段簽核流程 · 代申請 · 附件上傳 · 假別餘額</div></div>
+      <div class="cell"><div class="k">薪資</div><div class="d">薪資結構 · 薪資單 · 所得稅／二代健保 · 調薪紀錄</div></div>
+      <div class="cell"><div class="k">組織與人事</div><div class="d">部門／組織圖 · 員工主檔 · My Data 履歷（學經歷 · 證照 · 年資）</div></div>
+      <div class="cell"><div class="k">招募 ATS · KPI</div><div class="d">職缺 · 面試 · Offer · 報到；KPI 範本與績效考核</div></div>
+      <div class="cell"><div class="k">公告 · 通知 · AI 助理</div><div class="d">公司公告 · 通知中心 · 內建 AI 問答助理</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 HIGHLIGHT: PROFIT SHARING -->
+<section class="slide" id="s6" data-label="亮點 · 專案分潤">
+  <div class="inner wide">
+    <div class="pv-wrap">
+      <div class="mock reveal">
+        <div class="uiframe">
+          <div class="bar"><span class="role mgr">主管視角</span><span class="pill on">可見全部分潤</span></div>
+          <table class="mt">
+            <tr><td class="nm">陳專案（負責人）</td><td class="amt">30,000</td></tr>
+            <tr><td class="nm">林設計</td><td class="amt">24,000</td></tr>
+            <tr><td class="nm">王工程</td><td class="amt">18,000</td></tr>
+          </table>
+        </div>
+        <div class="uiframe">
+          <div class="bar"><span class="role self">組員視角（林設計）</span><span class="pill lock">只見自己</span></div>
+          <table class="mt">
+            <tr class="me"><td class="nm">林設計（你）</td><td class="amt">24,000</td></tr>
+            <tr><td class="nm mask">●●●</td><td class="amt mask">＊＊,＊＊＊</td></tr>
+            <tr><td class="nm mask">●●●</td><td class="amt mask">＊＊,＊＊＊</td></tr>
+          </table>
+        </div>
+        <p class="cap">同一個專案，兩種視角 —— 主管看全部，組員只看到自己。</p>
+      </div>
+      <div class="pv-side">
+        <div class="eyebrow reveal">核心亮點 · 專案獎金分潤</div>
+        <h2 class="reveal" style="transition-delay:.05s;font-size:clamp(26px,3.4vw,40px)">分潤透明留痕，<br>但只有該看的人看得到。</h2>
+        <ul class="why reveal" style="transition-delay:.1s">
+          <li>兩種模式：獎金池 × 百分比，或直接填每人金額</li>
+          <li>比例／金額隨時可調，每次調整自動留下異動紀錄</li>
+          <li>組員彼此看不到分潤，專案負責人與部門主管才看得到全部</li>
+          <li>權限由系統與資料庫雙重把關，不再靠私下的 Excel</li>
+        </ul>
+        <a class="cta reveal" style="transition-delay:.18s" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">開啟線上系統 Demo　›</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 HIGHLIGHT: KNOWLEDGE + ACCOUNTS -->
+<section class="slide alt" id="s7" data-label="客製模組">
+  <div class="inner wide">
+    <div class="eyebrow reveal">另外兩個客製模組</div>
+    <h2 class="reveal" style="transition-delay:.05s">把資料與權限，一起理清楚。</h2>
+    <div class="grid g2 reveal" style="transition-delay:.12s">
+      <div class="cell">
+        <span class="tp">客製</span>
+        <div class="k">內部知識庫</div>
+        <div class="d">各專案文件集中管理，全公司都能快速調閱所需資料；檔案存於私有雲端儲存、以簽名連結下載，員工離職也不怕資料被帶走或遺失。</div>
+      </div>
+      <div class="cell">
+        <span class="tp">客製</span>
+        <div class="k">員工帳號權限配發</div>
+        <div class="d">每位員工一組專屬帳號，後台一鍵配發／重設密碼、指派角色與權限；主管、人資、一般員工各司其職，權限一目了然。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 TECH & SECURITY -->
+<section class="slide ink" id="s8" data-label="技術與資安">
+  <div class="inner wide">
+    <div class="eyebrow reveal">技術與資安</div>
+    <h2 class="reveal" style="transition-delay:.05s">穩定、安全、隨處可用。</h2>
+    <div class="grid g4 reveal" style="transition-delay:.12s">
+      <div class="cell" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">雲端 SaaS</div><div class="d" style="color:#b9c9dc">免自建機房，開瀏覽器即用，隨處可存取。</div></div>
+      <div class="cell" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">逐列權限 RLS</div><div class="d" style="color:#b9c9dc">資料庫層級的權限控管，分潤等敏感資料多一層保護。</div></div>
+      <div class="cell" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">自動部署</div><div class="d" style="color:#b9c9dc">更新即時上線，維運穩定、不中斷。</div></div>
+      <div class="cell" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);"><div class="k" style="color:#fff">行動友善</div><div class="d" style="color:#b9c9dc">手機、平板、電腦皆可操作，員工隨手打卡。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 TIMELINE -->
+<section class="slide" id="s9" data-label="時間表">
+  <div class="inner wide">
+    <div class="eyebrow reveal">執行時間表</div>
+    <h2 class="reveal" style="transition-delay:.05s">12 週完工，三個月上線。</h2>
+    <div class="tl reveal" style="transition-delay:.12s">
+      <div class="step"><span class="when">第 1–2 週</span><span class="what">需求訪談與流程盤點</span></div>
+      <div class="step"><span class="when">第 3–5 週</span><span class="what">平台建置：<small>帳號權限 · 組織人事 · 差勤核心</small></span></div>
+      <div class="step"><span class="when">第 6–8 週</span><span class="what">請假簽核 · 薪資 · 招募 KPI</span></div>
+      <div class="step"><span class="when">第 9–10 週</span><span class="what">客製三模組：<small>專案分潤 · 知識庫 · 帳號配發</small></span></div>
+      <div class="step"><span class="when">第 11 週</span><span class="what">整合測試與資料匯入</span></div>
+      <div class="step mile"><span class="when">第 11 週末</span><span class="what"><b>交付測試版</b><span class="tag">里程碑</span>　供全面試用驗收</span></div>
+      <div class="step"><span class="when">第 12 週</span><span class="what">教育訓練與上線輔導</span></div>
+      <div class="step mile"><span class="when">第 12 週末</span><span class="what"><b>正式上線</b><span class="tag">里程碑</span>　啟用正式網址、切換正式站</span></div>
+    </div>
+    <p class="fine reveal" style="transition-delay:.2s">總期程約 3 個月，自簽約日起算；里程碑日期依實際啟動時間調整。</p>
+  </div>
+</section>
+
+<!-- 10 QUOTE -->
+<section class="slide tint" id="s10" data-label="報價">
+  <div class="inner">
+    <div class="eyebrow gold reveal">專案報價</div>
+    <h2 class="reveal" style="transition-delay:.05s">一次建置，長期使用。</h2>
+    <div class="qlist reveal" style="transition-delay:.12s">
+      <div class="qrow"><span class="l">平台建置與多租戶白標基礎<small>系統架構 · 帳號認證 · 租戶／品牌設定 · 權限模型</small></span><span class="v">120,000</span></div>
+      <div class="qrow"><span class="l">HR 差勤核心<small>組織人事 80k · 差勤 110k · 請假簽核 70k · 薪資 90k</small></span><span class="v">350,000</span></div>
+      <div class="qrow"><span class="l">招募 ATS 與 KPI 績效</span><span class="v">60,000</span></div>
+      <div class="qrow"><span class="l">客製三模組<small>專案獎金分潤 110k · 內部知識庫 50k · 帳號權限配發 30k</small></span><span class="v">190,000</span></div>
+      <div class="qrow"><span class="l">雲端部署上線與資安設定</span><span class="v">40,000</span></div>
+      <div class="qrow"><span class="l">教育訓練與上線輔導</span><span class="v">40,000</span></div>
+      <div class="qtotal"><span class="l">專案總價（未稅）</span><span class="v"><small>NT$</small>800,000</span></div>
+    </div>
+    <p class="qsub reveal" style="transition-delay:.2s">營業稅 5% 另計（含稅參考 <b>NT$ 840,000</b>）。付款方式：簽約 <b>40%</b> · 交付驗收 <b>50%</b> · 保固期滿 <b>10%</b>，含上線後 30 天免費保固。年度維護與行動 App 為選配，另行報價。</p>
+  </div>
+</section>
+
+<!-- 11 CLOSING -->
+<section class="slide ink" id="s11" data-label="結尾">
+  <div class="inner">
+    <div class="eyebrow reveal">The pitch</div>
+    <h1 class="reveal" style="transition-delay:.05s;font-size:clamp(30px,5.2vw,60px)">把內部作業，<br>交給一套對的系統。</h1>
+    <p class="lead reveal" style="transition-delay:.12s">系統已實際建置完成、可立即點進去操作。歡迎現在就開啟線上 Demo 試用。</p>
+    <div class="linkrow reveal" style="transition-delay:.16s">
+      <a class="cta" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">開啟線上系統 Demo　›</a>
+      <a class="cta ghost" href="#s10">查看報價</a>
+    </div>
+    <p class="fine reveal" style="transition-delay:.24s">線上系統　kimi-hr-web.vercel.app</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dotsWrap=document.getElementById('dots');
+  var pfill=document.getElementById('pfill');
+  var total=slides.length, active=0;
+
+  slides.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.type='button';
+    b.setAttribute('aria-label','前往：'+(s.dataset.label||('第 '+(i+1)+' 頁')));
+    b.innerHTML='<span class="lbl">'+(s.dataset.label||(i+1))+'</span>';
+    b.addEventListener('click',function(){ slides[i].scrollIntoView({behavior:'smooth'}); });
+    dotsWrap.appendChild(b);
+  });
+  var dots=[].slice.call(dotsWrap.children);
+
+  function setActive(i){
+    if(i===active) return;
+    active=i;
+    dots.forEach(function(d,j){ d.setAttribute('data-active', j===i?'true':'false'); });
+    if(pfill) pfill.style.width=((i+1)/total*100)+'%';
+  }
+  dots[0].setAttribute('data-active','true');
+  if(pfill) pfill.style.width=(1/total*100)+'%';
+
+  if('IntersectionObserver' in window){
+    var actObs=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting && e.intersectionRatio>=0.55){ setActive(slides.indexOf(e.target)); }
+      });
+    },{threshold:[0.55]});
+    slides.forEach(function(s){ actObs.observe(s); });
+
+    var revObs=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting) e.target.classList.add('in');
+        else e.target.classList.remove('in');
+      });
+    },{threshold:0.18});
+    document.querySelectorAll('.reveal').forEach(function(r){ revObs.observe(r); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); });
+  }
+
+  window.addEventListener('keydown',function(ev){
+    var k=ev.key;
+    if(k==='ArrowDown'||k==='PageDown'||k===' '||k==='Spacebar'){ ev.preventDefault(); if(active<total-1) slides[active+1].scrollIntoView({behavior:'smooth'}); }
+    else if(k==='ArrowUp'||k==='PageUp'){ ev.preventDefault(); if(active>0) slides[active-1].scrollIntoView({behavior:'smooth'}); }
+    else if(k==='Home'){ ev.preventDefault(); slides[0].scrollIntoView({behavior:'smooth'}); }
+    else if(k==='End'){ ev.preventDefault(); slides[total-1].scrollIntoView({behavior:'smooth'}); }
+  });
+})();
+</script>
+</body>
+</html>
