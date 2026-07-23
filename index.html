@@ -169,6 +169,19 @@
   .qrow.disc{border-bottom:0;padding:5px 2px;}
   .qrow.disc .l,.qrow.disc .v{color:var(--gold);font-weight:700;}
   .qtotal.tight{margin-top:12px;padding-top:16px;}
+  /* 報價頁項目多，壓縮該頁高度使其單屏容納 */
+  #s10{padding-top:74px;padding-bottom:48px;}
+  #s10 h2{font-size:clamp(22px,3vw,32px);}
+  #s10 .eyebrow{margin-bottom:10px;}
+  #s10 .qlist.compact{margin-top:16px;}
+  #s10 .qlist.compact .qrow{padding:6px 2px;}
+  #s10 .qlist.compact .qrow .l{font-size:14.5px;}
+  #s10 .qlist.compact .qrow .l small{margin-top:1px;font-size:12px;}
+  #s10 .qgroup{margin-top:12px;}
+  #s10 .qtotal.tight{margin-top:10px;padding-top:13px;}
+  #s10 .qtotal .v{font-size:clamp(28px,3.6vw,38px);}
+  #s10 .qsub{margin-top:12px;font-size:12.5px;line-height:1.6;}
+  @media(min-height:1000px){#s10{padding-top:104px;padding-bottom:84px;}}
 
   /* reveal */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
