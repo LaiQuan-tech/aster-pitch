@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kimi 內部營運平台 — 系統建置提案</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%231a1a1a'/%3E%3Ctext x='32' y='45' font-family='system-ui,sans-serif' font-size='38' font-weight='800' fill='%23ffce00' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
-<meta name="description" content="Kimi 公司事務數位化平台建置提案 — 資料電子化、獎金自動分配、表單簽核與人事差勤全面上雲。特色功能、12 週時程與報價。萊乾資訊 LaiQuan。">
+<meta name="description" content="Kimi 公司事務數位化平台建置提案 — 資料電子化、獎金自動分配、專案進度追蹤（甘特圖／看板）、表單簽核與人事差勤全面上雲。特色功能、12 週時程與報價。萊乾資訊 LaiQuan。">
 <meta property="og:title" content="Kimi 內部營運平台 — 公司數位化提案">
 <meta property="og:description" content="一套平台，讓公司運作全面數位化 —— 資料電子化、獎金自動分配、人事差勤與權限管理。12 週完工。萊乾資訊 LaiQuan。">
 <meta property="og:type" content="website">
@@ -121,6 +121,22 @@
   table.mt tr.me{background:var(--yellow-wash);}
   .mask{color:var(--gray2);letter-spacing:.12em;}
   .mock .cap{font-size:12.5px;color:var(--gray);text-align:center;font-weight:500;}
+
+  /* gantt mock */
+  .gantt{padding:12px 14px;display:flex;flex-direction:column;gap:9px;}
+  .grow{display:grid;grid-template-columns:66px 1fr;align-items:center;gap:10px;}
+  .gl{font-size:11.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
+  .gtrack{position:relative;height:15px;background:repeating-linear-gradient(90deg,#f0e6c8 0 1px,transparent 1px 25%);border-radius:5px;}
+  .gbar{position:absolute;top:0;bottom:0;background:var(--yellow);border:1.5px solid var(--ink);border-radius:5px;}
+  .gbar.soft{background:var(--yellow-soft);}
+  /* kanban mock */
+  .kanban{padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .kcol{background:var(--bg-tint);border:1.5px solid var(--ink);border-radius:9px;padding:7px;}
+  .kh{font-family:var(--display);font-size:10.5px;font-weight:800;color:var(--ink);margin-bottom:7px;text-align:center;}
+  .kcard{background:#fff;border:1.5px solid var(--ink);border-radius:7px;padding:6px 8px;font-size:10.5px;font-weight:600;margin-bottom:6px;box-shadow:1.5px 2px 0 rgba(26,26,26,.12);}
+  .kcard:last-child{margin-bottom:0;}
+  .kcard.hot{background:var(--yellow);}
+  .kcard.done{opacity:.55;text-decoration:line-through;}
 
   /* timeline */
   .tl{display:flex;flex-direction:column;gap:2px;margin-top:40px;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;}
@@ -241,10 +257,10 @@
     <div class="grid g3 reveal" style="transition-delay:.12s">
       <div class="cell"><div class="k">資料電子化 · 知識庫</div><div class="d">各專案文件與資料集中電子化，全公司隨時調閱、離職不流失。</div></div>
       <div class="cell"><div class="k">獎金自動分配</div><div class="d">專案獎金依比例或金額自動計算分配，取代 Excel 手算、全程留痕。</div></div>
+      <div class="cell"><div class="k">專案進度追蹤</div><div class="d">甘特圖看時程、看板管任務，老闆一頁掌握全公司專案進度。</div></div>
       <div class="cell"><div class="k">表單與簽核數位化</div><div class="d">各類申請、多段簽核、附件上傳全上線，流程可追蹤。</div></div>
       <div class="cell"><div class="k">帳號與權限管理</div><div class="d">每位員工專屬帳號，角色權限分明，敏感資料受控。</div></div>
-      <div class="cell"><div class="k">人事差勤薪資</div><div class="d">打卡、排班、請假、薪資、招募與績效考核，一併涵蓋。</div></div>
-      <div class="cell"><div class="k">訊息 · 通知 · AI 助理</div><div class="d">公司公告、通知中心、內建 AI 問答助理。</div></div>
+      <div class="cell"><div class="k">人事差勤薪資</div><div class="d">打卡、排班、請假、薪資、招募與績效，一併涵蓋。</div></div>
     </div>
   </div>
 </section>
@@ -282,6 +298,44 @@
           <li>全程數位留痕，不再靠私下的 Excel 手算</li>
         </ul>
         <a class="cta reveal" style="transition-delay:.18s" href="https://kimi-hr-web.vercel.app" target="_blank" rel="noopener">開啟線上系統 Demo　›</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6b HIGHLIGHT: PROJECT PROGRESS (GANTT + KANBAN) -->
+<section class="slide" id="s6b" data-label="亮點 · 進度追蹤">
+  <div class="inner wide">
+    <div class="pv-wrap">
+      <div class="mock reveal">
+        <div class="uiframe">
+          <div class="bar"><span class="role">專案甘特圖</span><span class="pill on">本季 · 4 專案</span></div>
+          <div class="gantt">
+            <div class="grow"><span class="gl">官網改版</span><span class="gtrack"><i class="gbar" style="left:2%;width:32%"></i></span></div>
+            <div class="grow"><span class="gl">品牌活動</span><span class="gtrack"><i class="gbar soft" style="left:20%;width:44%"></i></span></div>
+            <div class="grow"><span class="gl">系統導入</span><span class="gtrack"><i class="gbar" style="left:40%;width:52%"></i></span></div>
+            <div class="grow"><span class="gl">通路拓展</span><span class="gtrack"><i class="gbar soft" style="left:62%;width:34%"></i></span></div>
+          </div>
+        </div>
+        <div class="uiframe">
+          <div class="bar"><span class="role">任務看板</span><span class="pill lock">拖拉更新</span></div>
+          <div class="kanban">
+            <div class="kcol"><div class="kh">待辦</div><div class="kcard">需求訪談</div><div class="kcard">視覺定稿</div></div>
+            <div class="kcol"><div class="kh">進行中</div><div class="kcard hot">前台開發</div><div class="kcard">資料匯入</div></div>
+            <div class="kcol"><div class="kh">完成</div><div class="kcard done">合約簽訂</div><div class="kcard done">環境建置</div></div>
+          </div>
+        </div>
+        <p class="cap">甘特圖看時程、看板看任務 —— 全公司專案進度一頁掌握。</p>
+      </div>
+      <div class="pv-side">
+        <div class="eyebrow reveal">核心亮點 · 專案進度追蹤</div>
+        <h2 class="reveal" style="transition-delay:.05s;font-size:clamp(26px,3.4vw,42px)">老闆一眼看懂，<br>公司每個專案的進度。</h2>
+        <ul class="why reveal" style="transition-delay:.1s">
+          <li>甘特圖：各專案時程、里程碑與重疊一目了然</li>
+          <li>看板：任務依「待辦／進行中／完成」拖拉更新狀態</li>
+          <li>跨專案總覽：老闆與主管一頁掌握全公司進度</li>
+          <li>與獎金分潤、知識庫同一平台，專案資料互通</li>
+        </ul>
       </div>
     </div>
   </div>
