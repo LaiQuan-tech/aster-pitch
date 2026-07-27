@@ -150,6 +150,11 @@
   .tl .step.mile .when{color:var(--ink);}
   .tl .step.mile .what b{color:var(--ink);font-weight:800;}
   .tl .tag{display:inline-block;font-size:11px;font-weight:700;color:var(--yellow);background:var(--ink);border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:middle;}
+  /* 上線後的持續服務（不在 12 週建置期內）— 灰底區隔 */
+  .tl .step.post{background:rgba(26,26,26,.055);border:1.5px solid rgba(26,26,26,.2);border-radius:12px;padding:14px 16px;margin:4px 0;border-bottom-color:rgba(26,26,26,.2);}
+  .tl .step.post .when{color:var(--gray);}
+  .tl .step.post .what{color:var(--gray);}
+  .tl .step.post .what b{color:var(--ink);font-weight:800;}
 
   /* quote */
   .qlist{margin-top:34px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;}
@@ -389,6 +394,7 @@
       <div class="step"><span class="when">第 11 週</span><span class="what">人事差勤與整合測試<small>　表單簽核 · 差勤薪資 · 資料匯入</small></span></div>
       <div class="step"><span class="when">第 12 週</span><span class="what">雲端部署上線與資安設定</span></div>
       <div class="step mile"><span class="when">第 12 週末</span><span class="what"><b>正式上線</b><span class="tag">里程碑</span>　啟用正式網址、切換正式站</span></div>
+      <div class="step post"><span class="when">上線後</span><span class="what"><b>教育訓練與陪跑</b><small>　四個月 · 每兩週一次 · 每次兩小時</small></span></div>
     </div>
     <p class="fine reveal" style="transition-delay:.2s">＊實際起訖以簽約後確認為準，總期程約 3 個月（12 週）。</p>
   </div>
