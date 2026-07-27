@@ -1,6 +1,6 @@
 # kimi-pitch
 
-Kimi 公司內部營運平台 — **系統建置提案簡報（Apple 風全螢幕 pitch deck）**。
+亞斯特設計顧問 數位化系統 — **系統建置提案簡報（Apple 風全螢幕 pitch deck）**。
 
 - 線上：<https://kimi-pitch.vercel.app>
 - 純靜態站（單一 `index.html`），**push 到 `main` → Vercel 自動部署**（framework=static）。
