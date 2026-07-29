@@ -185,12 +185,25 @@
   #s9 .qnote{margin-top:6px;font-size:11px;}
   @media(min-height:1080px){#s9{padding-top:100px;padding-bottom:76px;}}
   /* 矮螢幕（1366×768 這類筆電）再壓一段，確保整頁仍在一屏內 */
-  @media(max-height:760px){
+  @media(max-height:820px){
     #s9{padding-top:40px;padding-bottom:24px;}
     #s9 h2{font-size:clamp(20px,2.6vw,26px);}
     #s9 .tl .step{padding:4px 4px;}
     #s9 .tl .step.mile,#s9 .tl .step.post{padding:4px 14px;margin:2px 0;}
     #s9 .qtotal{padding:8px 18px;}
+  }
+  /* 極矮視窗（筆電扣掉瀏覽器工具列後常只剩 600 多）：再壓一段 */
+  @media(max-height:700px){
+    #s9{padding-top:28px;padding-bottom:18px;}
+    #s9 h2{font-size:clamp(18px,2.2vw,22px);}
+    #s9 .tl{margin-top:8px;}
+    #s9 .tl .step{padding:2px 4px;}
+    #s9 .tl .step.mile,#s9 .tl .step.post{padding:2px 12px;margin:1px 0;}
+    #s9 .tl .what{font-size:13.5px;}
+    #s9 .tl .what small{font-size:11.5px;}
+    #s9 .tl .amt{font-size:13.5px;}
+    #s9 .qsum{padding:2px 0;font-size:12.5px;}
+    #s9 .qtotal .v{font-size:clamp(22px,3vw,30px);}
   }
   /* 窄螢幕：金額掉到第二欄下方，避免三欄擠爆 */
   @media(max-width:820px){
